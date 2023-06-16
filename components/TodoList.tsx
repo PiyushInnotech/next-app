@@ -12,7 +12,7 @@ const TodoList = () => {
     }
   }
   
-  const [todoList, setTodoList] = useState(getLocalList());
+  const [todoList, setTodoList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const router = useRouter()
 
@@ -32,6 +32,10 @@ const TodoList = () => {
   const showDescription = (index:any) => {
     setActiveIndex(index === activeIndex ? -1 : index);
   }
+
+  useEffect(() => {
+    setTodoList(getLocalList)
+  },[])
 
   useEffect(() => {
     localStorage.setItem("todolist", JSON.stringify(todoList))
