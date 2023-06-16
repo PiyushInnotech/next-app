@@ -1,8 +1,7 @@
+import React from "react";
 import AddTodo from "@/components/AddTodo";
-export const AddTodoPage = () =>  {
+export default function AddTodoPage ()  {
   return (
     <AddTodo />
   )
 }
-
-export default AddTodoPage;
