@@ -1,8 +1,6 @@
 import TodoList from '../components/TodoList'
-const Home = () => {
+export default function Home (){
   return (
     <TodoList />
   )
 }
-
-export default Home
