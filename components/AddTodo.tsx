@@ -28,7 +28,7 @@ const AddTodo = () => {
         setNewTodo((prevTodo) => ({ ...prevTodo, id: newTodoId }));
     }, [newTodoId])
 
-    const handleAddTodoItem = (e) => {
+    const handleAddTodoItem = (e: any) => {
         const { name, value } = e.target;
         if (value) {
             setError('')
@@ -36,7 +36,7 @@ const AddTodo = () => {
         setNewTodo({ ...newTodo, [name]: value })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         if (newTodo.title && newTodo.desc) {
             if (todoList) {

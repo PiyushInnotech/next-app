@@ -16,9 +16,9 @@ const TodoList = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const router = useRouter()
 
-  const deleteTodo = (e, index) => {
+  const deleteTodo = (e:any, index:any) => {
     e.stopPropagation();
-    let updatedList = todoList.filter((item, ind) => {
+    let updatedList = todoList.filter((item:any, ind:any) => {
       return ind !== index;
     })
 
@@ -29,7 +29,7 @@ const TodoList = () => {
     router.push('/addtodo')
   }
 
-  const showDescription = (index) => {
+  const showDescription = (index:any) => {
     setActiveIndex(index === activeIndex ? -1 : index);
   }
 
@@ -42,7 +42,7 @@ const TodoList = () => {
       <h1 className="pageHeading">To Do List</h1>
       <div className='listWrapper'>
         {
-          todoList && todoList.length ? todoList.map((todo, index) => {
+          todoList && todoList.length ? todoList.map((todo:any, index:any) => {
             return (
               <div className="listItem" key={todo.id}>
                 <div className='title' onClick={() => showDescription(index)}>
