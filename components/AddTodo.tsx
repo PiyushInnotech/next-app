@@ -1,31 +1,24 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const getLocalList = () => {
-    let list = localStorage.getItem('todolist')
-    if (list) {
-        return JSON.parse(list)
-    } else {
-        return [];
-    }
-}
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { addTodoAction } from '@/redux/todos/todoSlice';
 
 const AddTodo = () => {
     const [newTodo, setNewTodo] = useState({
         title: '',
         desc: '',
         id: null,
-        showDesc: false
     });
 
     const [error, setError] = useState('');
-    const [todoList, setTodoList] = useState(getLocalList());
+    const todoList = useAppSelector((state) => state.todoReducer.list)
     const newTodoId = todoList && todoList.length ? todoList[todoList.length - 1].id + 1 : 1
     const router = useRouter()
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        setNewTodo((prevTodo) => ({ ...prevTodo, id: newTodoId }));
+        setNewTodo((prevTodo: any) => ({ ...prevTodo, id: newTodoId }));
     }, [newTodoId])
 
     const handleAddTodoItem = (e: any) => {
@@ -39,12 +32,11 @@ const AddTodo = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
         if (newTodo.title && newTodo.desc) {
-            if (todoList) {
-                setTodoList([...todoList, newTodo]);
-                localStorage.setItem("todolist", JSON.stringify([...todoList, newTodo]))
-            } else {
-                localStorage.setItem('todolist', JSON.stringify([newTodo]))
-            }
+            dispatch(addTodoAction({
+                id: newTodoId,
+                title: newTodo.title,
+                desc: newTodo.desc
+            }))
             setNewTodo({ ...newTodo, title: '', desc: '' })
             router.push('/')
         } else {
