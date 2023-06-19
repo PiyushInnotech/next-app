@@ -1,58 +1,40 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { deleteTodoAction } from '@/redux/todos/todoSlice';
 const TodoList = () => {
-  const getLocalList = () => {
-    let list = localStorage.getItem('todolist')
-    if (list) {
-      return JSON.parse(list)
-    } else {
-      return [];
-    }
-  }
-  
-  const [todoList, setTodoList] = useState([]);
+
   const [activeIndex, setActiveIndex] = useState(-1);
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const todoItems = useAppSelector((state) => state.todoReducer.list)
 
-  const deleteTodo = (e:any, index:any) => {
+  const deleteTodo = (e : any, id: number) => {
     e.stopPropagation();
-    let updatedList = todoList.filter((item:any, ind:any) => {
-      return ind !== index;
-    })
-
-    setTodoList(updatedList)
+    dispatch(deleteTodoAction(id))
   }
 
   const addNewTodo = () => {
     router.push('/addtodo')
   }
 
-  const showDescription = (index:any) => {
+  const showDescription = (index: any) => {
     setActiveIndex(index === activeIndex ? -1 : index);
   }
-
-  useEffect(() => {
-    setTodoList(getLocalList)
-  },[])
-
-  useEffect(() => {
-    localStorage.setItem("todolist", JSON.stringify(todoList))
-  }, [todoList])
 
   return (
     <div className='todoList'>
       <h1 className="pageHeading">To Do List</h1>
       <div className='listWrapper'>
         {
-          todoList && todoList.length ? todoList.map((todo:any, index:any) => {
+          todoItems && todoItems.length ? todoItems.map((todo: any, index: number) => {
             return (
               <div className="listItem" key={todo.id}>
                 <div className='title' onClick={() => showDescription(index)}>
                   <p>{todo.title}</p>
                   <div>
-                    <button onClick={(e) => deleteTodo(e, index)}>X</button>
+                    <button onClick={(e) => deleteTodo(e ,todo.id)}>X</button>
                   </div>
                 </div>
                 {index === activeIndex && <p className="desc"> Description: {todo.desc} </p>}
@@ -66,7 +48,7 @@ const TodoList = () => {
           )
         }
       </div>
-      {todoList && todoList.length && <button className='addButton' onClick={() => addNewTodo()}>Add</button>}
+      {todoItems && todoItems.length && <button className='addButton' onClick={() => addNewTodo()}>Add</button>}
     </div>
   )
 }
